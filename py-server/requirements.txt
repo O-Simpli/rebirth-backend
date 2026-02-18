@@ -1,0 +1,24 @@
+# Web Framework & Server
+fastapi
+uvicorn
+python-multipart
+
+# PDF Processing
+pdfplumber
+pdfminer.six
+Pillow
+pikepdf
+
+# Data & Utilities
+numpy
+pydantic
+requests
+aiofiles
+psutil
+
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Logging & Developer Experience
+rich
