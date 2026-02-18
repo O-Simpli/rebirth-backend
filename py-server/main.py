@@ -38,6 +38,15 @@ ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://studiosimpli.com",
 ]
+
+# Regex pattern to match Cloudflare Pages preview deployments
+ALLOWED_ORIGIN_REGEX = r"https://.*\.studiosimpli\.pages\.dev"
+
+# Allow additional origins from environment variable (comma-separated)
+extra_origins = os.getenv("CORS_ORIGINS", "")
+if extra_origins:
+    ALLOWED_ORIGINS.extend([origin.strip() for origin in extra_origins.split(",") if origin.strip()])
+
 DEFAULT_CACHE_MAX_AGE = 3600
 DEFAULT_TIMEOUT_SECONDS = 300
 MIN_TIMEOUT_SECONDS = 30
@@ -53,9 +62,12 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition", "Content-Length", "ETag", "Cache-Control"],
+    max_age=3600,  # Cache preflight for 1 hour
 )
 
 @app.get("/")
